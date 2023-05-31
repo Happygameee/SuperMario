@@ -228,6 +228,17 @@ void PlayWidget::Move_Collision()
             mario->canmove = true;
         }
     }
+
+    //掉入洞后的情况 马里奥不能再动了
+    for (QVector < QVector < int >> ::iterator it = hole->m.begin()->begin(); it !=hole->m.begin()->end();it++)
+    {
+        if(mario->Map_x >(*it->begin()) && mario->Map_x < *(it->begin() + 1)
+            &&mario->y == 645
+            )
+        {
+            mario->canmove = false;
+        }
+    }
 }
 
 void PlayWidget::Fall_Down(int &y)
@@ -304,7 +315,7 @@ void PlayWidget::Fall_Down(int &y)
             mario->upstate = 2;
         }
         else if(mario->Map_x >(*it->begin()) && mario->Map_x < *(it->begin() + 1)
-                 &&mario->height == -20
+                 &&mario->height == -20 && mario->y == 645
             )
         {
             mario->isjump = false;
@@ -317,6 +328,8 @@ void PlayWidget::DieState()
 {
     if(mario->isdie)
     {
+        //mario->life--;
+        qDebug() << mario->life;
         killTimer(timer1);//结束计时器
         emit MarioDie();
     }
@@ -324,13 +337,16 @@ void PlayWidget::DieState()
 
 void PlayWidget::restart()
 {
+    //重新初始化游戏数据
     mario->isdie = false;
     xnow = 0;
     mario->x = 0;
     mario->y = 485;
     mario->height = 0;
     mario->Map_x = 0;
+    mario->canmove = true;
 
+    //重启计时器
     QTimer::singleShot(1000, this, [=]() {
         timer1 = startTimer(15);
     });
