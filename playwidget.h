@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <pipe.h>
 #include <hole.h>
+#include <brick.h>
 
 class PlayWidget : public QMainWindow
 {
@@ -24,17 +25,19 @@ public:
     void Move_Collision();
     void Fall_Down(int &);
     void DieState();
-    void restart();
+    void restart();//重新开始游戏的初始化
 
     Mario *mario;
     Pipe *pipe;
     Hole *hole;
+    Brick *brick;
 
     int timer1;
     int timer2;
     int timer3;
 
-    int xnow = 0;
+    int xnow = 0;//用于画地图的表示当前的x值
+
 signals:
     void MarioDie();
 };

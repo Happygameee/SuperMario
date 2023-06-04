@@ -4,7 +4,6 @@
 
 
 #include <QMainWindow>
-#include "mario.h"
 
 class Tranwidget : public QMainWindow
 {
@@ -13,7 +12,6 @@ public:
     explicit Tranwidget(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
 
-    Mario *mario;
 signals:
 
 };

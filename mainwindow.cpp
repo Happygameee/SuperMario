@@ -8,6 +8,7 @@
 #include "assistant.h"
 #include "tranwidget.h"
 #include "playwidget.h"
+#include "diewidget.h"
 #include <QTime>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -44,9 +45,10 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     //跳转至过渡界面
-    Tranwidget *tranwidget = new Tranwidget;
-    PlayWidget *playwidget = new PlayWidget;
     connect(this,&MainWindow::presss,[=](){
+        Tranwidget *tranwidget = new Tranwidget;
+        PlayWidget *playwidget = new PlayWidget;
+        DieWidget *diewidget = new DieWidget;
         QTimer::singleShot(100,this,[=](){
             //record->setParent(tranwidget);
             tranwidget->setGeometry(this->geometry());
@@ -61,42 +63,46 @@ MainWindow::MainWindow(QWidget *parent)
             playwidget->show();
             tranwidget->hide();
         });
-    });
 
-
-    connect(playwidget,&PlayWidget::MarioDie,[=](){
-        if (playwidget->mario->life > 0)//马里奥生命值不为0 还能继续游戏
-        {
-            playwidget->mario->isdie = false;
+        connect(playwidget,&PlayWidget::MarioDie,[=](){
             playwidget->mario->life--;
-            QTimer::singleShot(2000,this,[=](){
-                //record->setParent(tranwidget);
-                tranwidget->setGeometry(playwidget->geometry());
-                tranwidget->show();
+            if (playwidget->mario->life > 0)//马里奥生命值不为0 还能继续游戏
+            {
+                playwidget->mario->isdie = false;
 
-                playwidget->restart();
+                QTimer::singleShot(2000,this,[=](){
+                    //record->setParent(tranwidget);
+                    diewidget->setGeometry(playwidget->geometry());
+                    diewidget->show();
 
-                QTimer::singleShot(1000,this,[=](){
-                    //record->setParent(playwidget);
-                    //record->mario = playwidget->mario;
-                    playwidget->setGeometry(tranwidget->geometry());
-                    playwidget->show();
-                    tranwidget->hide();
+                    playwidget->restart();
+
+                    QTimer::singleShot(1000,this,[=](){
+                        //record->setParent(playwidget);
+                        //record->mario = playwidget->mario;
+                        playwidget->setGeometry(tranwidget->geometry());
+                        playwidget->show();
+                        diewidget->hide();
+                    });
                 });
-            });
-         }
-        else if (playwidget->mario->life == 0)//结束游戏
-        {
-            //返回开始界面
-            QTimer::singleShot(1000,this,[=](){
-                this->setGeometry(playwidget->geometry());
-                this->show();
-                playwidget->hide();
-            });
-
-            playwidget->mario->Mario_Init();
-            playwidget->xnow = 0;
-        }
+            }
+            else if (playwidget->mario->life == 0)//结束游戏
+            {
+                //返回开始界面
+                QTimer::singleShot(1000,this,[=](){
+                    diewidget->show();
+                    playwidget->hide();
+                    QTimer::singleShot(1000,this,[=](){
+                        this->setGeometry(playwidget->geometry());
+                        this->show();
+                        diewidget->hide();
+                        delete playwidget;
+                        delete tranwidget;
+                        delete diewidget;
+                    });
+                });
+            }
+        });
     });
 }
 

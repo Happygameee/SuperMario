@@ -90,7 +90,7 @@ void Mario::walk()
     {
         walkstate = 0;
     }
-    //qDebug() << Map_x;
+    qDebug() << Map_x;
 }
 
 void Mario::jump_down()
