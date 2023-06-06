@@ -26,6 +26,7 @@ void PlayWidget::gameInit()
     pipe = new Pipe;
     hole = new Hole;
     brick = new Brick;
+    unknown = new Unknown;
 }
 
 void PlayWidget::timerEvent(QTimerEvent *ev)
@@ -46,18 +47,15 @@ void PlayWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
+    if (mario->x==600 && mario->direction == "right" && mario->ismoving ==true)
+    {
+        xnow = 600 - mario->Map_x;
+    }
+
     //绘画背景
     QPixmap back;
     back.load(":/resources/image/level/1-1.png");
-    if (mario->x==600 && mario->direction == "right" && mario->ismoving ==true)
-    {
-        painter.drawPixmap(xnow,0,8800,600,back);
-        xnow = 600 - mario->Map_x;
-    }
-    else
-    {
-        painter.drawPixmap(xnow,0,8800,600,back);
-    }
+    painter.drawPixmap(xnow,0,8800,600,back);
 
     //绘画马里奥
     QPixmap person;
@@ -78,6 +76,14 @@ void PlayWidget::paintEvent(QPaintEvent *)
         person.load(":/resources/image/entity/person/childDie.png");
     }
     painter.drawPixmap(mario->x,mario->y + mario->height - mario->distance,40,40,person);
+
+    //绘画questionblock
+    QPixmap qblock;
+    qblock.load(":/resources/image/wall/block/ground/questionblock0.png");
+    for (QVector < QVector < int >> ::iterator it = unknown->m.begin()->begin(); it !=unknown->m.begin()->end();it++)
+    {
+        painter.drawPixmap(*it->begin() + xnow,*(it->begin() + 1),40,40,qblock);
+    }
 }
 
 void PlayWidget::keyPressEvent(QKeyEvent *event)
@@ -287,6 +293,12 @@ void PlayWidget::Move_Collision()
             mario->canmove = true;
         }
     }
+
+    //unKnown
+    for (QVector < QVector < int >> ::iterator it = brick->m.begin()->begin(); it !=brick->m.begin()->end();it++)
+    {
+
+    }
 }
 
 void PlayWidget::Fall_Down(int &y)
@@ -354,7 +366,7 @@ void PlayWidget::Fall_Down(int &y)
     for (QVector < QVector < int >> ::iterator it = hole->m.begin()->begin(); it !=hole->m.begin()->end();it++)
     {
         if(mario->Map_x >(*it->begin()) && mario->Map_x < *(it->begin() + 1)
-                &&mario->height == 0
+                &&mario->height == 0 && mario->distance == 0
             )
         {
             mario->y = 645;
@@ -376,6 +388,7 @@ void PlayWidget::Fall_Down(int &y)
     {
         if(mario->Map_x > (*it->begin()) - 40 && mario->Map_x < (*it->begin()) + 40
             &&mario->distance - mario->height == (*(it->begin() + 1)) * 40
+            && mario->upstate == 2
             )
         {
             mario->height = 0;
@@ -387,6 +400,26 @@ void PlayWidget::Fall_Down(int &y)
             && mario->distance == (*(it->begin() + 1)) * 40
             && mario->height == 0
             )
+        {
+            mario->isjump = true;
+            mario->upstate = 2;
+        }
+    }
+
+    //unKnown
+    for (QVector < QVector < int >> ::iterator it = unknown->m.begin()->begin(); it !=unknown->m.begin()->end();it++)
+    {
+        if (mario->Map_x - (*it->begin()) <= 40 && mario->Map_x - (*it->begin()) >= -30 &&
+            *(it->begin() + 1) == y + mario->height -mario->distance + 40
+            && mario->upstate == 2)
+        {
+            mario->height = 0;
+            mario->distance = y - *(it->begin() + 1) + 40;
+            mario->isjump = false;
+            return;
+        }
+        if((mario->Map_x - (*it->begin())==-40 || mario->Map_x - (*it->begin())==50)&&
+            mario->distance == y - *(it->begin() + 1) + 40 && mario->height == 0)
         {
             mario->isjump = true;
             mario->upstate = 2;

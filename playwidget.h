@@ -8,6 +8,7 @@
 #include <pipe.h>
 #include <hole.h>
 #include <brick.h>
+#include <unknown.h>
 
 class PlayWidget : public QMainWindow
 {
@@ -31,13 +32,14 @@ public:
     Pipe *pipe;
     Hole *hole;
     Brick *brick;
+    Unknown *unknown;
 
     int timer1;
     int timer2;
     int timer3;
 
     int xnow = 0;//用于画地图的表示当前的x值
-
+    int xblock = 0;
 signals:
     void MarioDie();
 };
