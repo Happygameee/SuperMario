@@ -39,7 +39,7 @@ void Mario::walk()
             walkstate = 1;
         }
     }
-    else if (direction == "right" && ismoving == true && canmove == true && x >= 600)
+    else if (direction == "right" && ismoving == true && canmove == true && x == 600)
     {
         Map_x += 10;
         if (walkstate < 3)
@@ -90,7 +90,7 @@ void Mario::walk()
     {
         walkstate = 0;
     }
-    qDebug() << Map_x;
+    //qDebug() << Map_x;
 }
 
 void Mario::jump_down()

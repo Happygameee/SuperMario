@@ -15,6 +15,14 @@ public:
     QVector<int> v;
     QVector <QVector<int>> v2;
     QMap<int, QVector<QVector < int>>> m;
+
+    bool coin;//金币是否已经出现
+    int coin_y;
+    int coin_state;
+    int coinheight;
+
+    void Unknown_crash(QVector<QVector < int>>::iterator it);
+    void CoinAppear();
 };
 
 #endif // UNKNOWN_H
