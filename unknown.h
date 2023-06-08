@@ -20,6 +20,7 @@ public:
     int coin_y;
     int coin_state;
     int coinheight;
+    int upstate;
 
     void Unknown_crash(QVector<QVector < int>>::iterator it);
     void CoinAppear();

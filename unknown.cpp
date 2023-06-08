@@ -26,17 +26,26 @@ void Unknown::UnknownInit()
 
 void Unknown::Unknown_crash(QVector<QVector < int>>::iterator it)
 {
-    if (coin == 0)
+    if (coin == 0 && *(it->begin()+2) == 1)
     {
         coin = 1;
         coin_state = 1;
         coinheight = 0;
         coin_y = *(it->begin() + 1);
+        *(it->begin()+2) = 0;
     }
 }
 
 void Unknown::CoinAppear()
 {
+    if (coin == 1 && upstate <3)
+    {
+        upstate++;
+    }
+    else if (upstate == 3)
+    {
+        upstate =0;
+    }
     if(coin_state == 1)
     {
         if (coinheight == -50)

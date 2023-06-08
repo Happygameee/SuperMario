@@ -39,6 +39,7 @@ void PlayWidget::timerEvent(QTimerEvent *ev)
         Fall_Down(mario->y);
         Move_Collision();
         Jump_Collision();
+        unknown->CoinAppear();
         DieState();
         update();
     }
@@ -78,12 +79,21 @@ void PlayWidget::paintEvent(QPaintEvent *)
     }
     painter.drawPixmap(mario->x,mario->y + mario->height - mario->distance,40,40,person);
 
-    //绘画questionblock
+    //绘画questionblock和金币
     QPixmap qblock;
     qblock.load(":/resources/image/wall/block/ground/questionblock0.png");
+
+    //画金币coin
+    QPixmap coin;
+    coin.load(":/resources/image/coin/flycoin"+ QString::number(unknown->upstate) +".png");
     for (QVector < QVector < int >> ::iterator it = unknown->m.begin()->begin(); it !=unknown->m.begin()->end();it++)
     {
         painter.drawPixmap(*it->begin() + xnow,*(it->begin() + 1),40,40,qblock);
+
+        if (*(it->begin()+2) == 0 || unknown->coin == 1)
+        {
+            painter.drawPixmap(*it->begin() + xnow,unknown->coin_y + unknown->coinheight - 40,40,40,coin);
+        }
     }
 }
 
@@ -139,7 +149,7 @@ void PlayWidget::Jump_Collision()
             //分类unknown效果
             if (*(it->begin() + 2) == 1)
             {
-
+                unknown->Unknown_crash(it);
             }
         }
     }
