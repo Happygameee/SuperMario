@@ -5,10 +5,12 @@
 #include <QMainWindow>
 #include "mario.h"
 #include <QTimer>
-#include <pipe.h>
-#include <hole.h>
-#include <brick.h>
-#include <unknown.h>
+#include <QSound>
+#include "pipe.h"
+#include "hole.h"
+#include "brick.h"
+#include "unknown.h"
+#include "musicplayer.h"
 
 class PlayWidget : public QMainWindow
 {
@@ -33,6 +35,7 @@ public:
     Hole *hole;
     Brick *brick;
     Unknown *unknown;
+    MusicPlayer *musicplayer;
 
     int timer1;
     int timer2;

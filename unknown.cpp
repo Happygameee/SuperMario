@@ -9,11 +9,12 @@ Unknown::Unknown()
 void Unknown::UnknownInit()
 {
     m.clear();
-    int arr[1][3] = {
-        {300,405,1}
+    int arr[2][3] = {
+        {300,405,1},
+        {600,405,1}
     };
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 2; i++) {
         v.push_back(arr[i][0]);
         v.push_back(arr[i][1]);
         v.push_back(arr[i][2]);
@@ -26,7 +27,7 @@ void Unknown::UnknownInit()
 
 void Unknown::Unknown_crash(QVector<QVector < int>>::iterator it)
 {
-    if (coin == 0 && *(it->begin()+2) == 1)
+    if (*(it->begin()+2) == 1)
     {
         coin = 1;
         coin_state = 1;

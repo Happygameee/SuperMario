@@ -27,6 +27,7 @@ void PlayWidget::gameInit()
     hole = new Hole;
     brick = new Brick;
     unknown = new Unknown;
+    musicplayer = new MusicPlayer;
 }
 
 void PlayWidget::timerEvent(QTimerEvent *ev)
@@ -90,7 +91,7 @@ void PlayWidget::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(*it->begin() + xnow,*(it->begin() + 1),40,40,qblock);
 
-        if (*(it->begin()+2) == 0 || unknown->coin == 1)
+        if (*(it->begin()+2) == 0)
         {
             painter.drawPixmap(*it->begin() + xnow,unknown->coin_y + unknown->coinheight - 40,40,40,coin);
         }

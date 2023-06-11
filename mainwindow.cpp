@@ -5,11 +5,13 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QTimer>
+#include "mypushbutton.h"
 #include "assistant.h"
 #include "tranwidget.h"
 #include "playwidget.h"
 #include "diewidget.h"
 #include <QTime>
+#include <QSoundEffect>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,6 +27,22 @@ MainWindow::MainWindow(QWidget *parent)
 //    record->setFixedSize(800,60);
 //    record->move(200,0);
 //    record->show();
+
+    MyPushButton *startBtn = new MyPushButton("");
+    //MyPushButton *assistBtn = new MyPushButton(":/resources/image/Btn/backBtn.png");
+
+    startBtn->setParent(this);
+    //assistBtn->setParent(this);
+    startBtn->move(400,300);
+    //assistBtn->move(400,400);
+
+    connect(startBtn,&QPushButton::clicked,[=](){
+        startBtn->zoom1();
+        startBtn->zoom2();
+        QTimer::singleShot(100,this,[=](){
+        emit presss();
+        });
+    });
 
     //跳转至帮助页面
     Assistant *assistantwidget = new Assistant;
@@ -59,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
         QTimer::singleShot(1000,this,[=](){
             //record->setParent(playwidget);
             //record->mario = playwidget->mario;
+            //gamesound->play();
             playwidget->setGeometry(tranwidget->geometry());
             playwidget->show();
             tranwidget->hide();
