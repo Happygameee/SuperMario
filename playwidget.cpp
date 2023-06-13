@@ -28,6 +28,9 @@ void PlayWidget::gameInit()
     brick = new Brick;
     unknown = new Unknown;
     musicplayer = new MusicPlayer;
+    monster = new Monster;
+    score = 0;
+    xnow = 0;
 }
 
 void PlayWidget::timerEvent(QTimerEvent *ev)
@@ -41,6 +44,7 @@ void PlayWidget::timerEvent(QTimerEvent *ev)
         Move_Collision();
         Jump_Collision();
         unknown->CoinAppear();
+        monster->MonsterMove();
         DieState();
         update();
     }
@@ -96,6 +100,16 @@ void PlayWidget::paintEvent(QPaintEvent *)
             painter.drawPixmap(*it->begin() + xnow,unknown->coin_y + unknown->coinheight - 40,40,40,coin);
         }
     }
+
+    //绘画Monster
+    QPixmap mon3ter;
+    for (QVector < QVector < int >> ::iterator it = monster->m.begin()->begin(); it !=monster->m.begin()->end();it++)
+    {
+        mon3ter.load(":/resources/image/entity/monster/ground/Monster" + QString::number(*(it->begin() + 5)) +".png");
+        //mon3ter.load(":/resources/image/entity/monster/ground/Monster1.png");
+        painter.drawPixmap(*(it->begin() + 2) + xnow,*(it->begin() + 3),40,40,mon3ter);
+        qDebug() << *(it->begin() + 2) + xnow << *(it->begin() + 3);
+    }
 }
 
 void PlayWidget::keyPressEvent(QKeyEvent *event)
@@ -139,7 +153,7 @@ void PlayWidget::Jump_Collision()
 {
     for (QVector < QVector < int >> ::iterator it = unknown->m.begin()->begin(); it != unknown->m.begin()->end();it++)
     {
-        if (mario->Map_x - (*it->begin()) <= 40 && mario->Map_x - (*it->begin()) >= -30 &&
+        if (mario->Map_x - (*it->begin()) <= 30 && mario->Map_x - (*it->begin()) >= -30 &&
             *(it->begin() + 1) == mario->y + mario->height -mario->distance - 40
             && mario->upstate == 1
             )
@@ -321,18 +335,29 @@ void PlayWidget::Move_Collision()
     //unKnown
     for (QVector < QVector < int >> ::iterator it = unknown->m.begin()->begin(); it != unknown->m.begin()->end();it++)
     {
-        if((mario->Map_x == *it->begin() - 40 ||mario->Map_x == *it->begin() + 50)
+        //和unKnown的碰撞
+        if((mario->Map_x == *it->begin() - 40 ||mario->Map_x == *it->begin() + 40)
             && mario->y + mario->height - mario->distance < *(it->begin() + 1) + 40
             && mario->y + mario->height - mario->distance > *(it->begin() + 1) - 40
             )
         {
             mario->canmove = false;
         }
-        else if((mario->Map_x == *it->begin() - 40||mario->Map_x == *it->begin() + 50)
+        else if((mario->Map_x == *it->begin() - 40||mario->Map_x == *it->begin() + 40)
                  && (mario->y + mario->height - mario->distance > *(it->begin() + 1)
                      || mario->y + mario->height - mario->distance < *(it->begin() + 1)-40))
         {
             mario->canmove= true;
+        }
+
+        //捡取金币的情况
+        if (mario->Map_x - (*it->begin()) < 40 && mario->Map_x - (*it->begin()) >= -30
+            &&*(it->begin() + 1) <= mario->y + mario->height -mario->distance + 40
+            &&*(it->begin() + 1)+40 >= mario->y + mario->height -mario->distance + 40
+            )
+        {
+            *(it->begin()+2) = 2;
+            ScoreAdd();//拾取金币得一分
         }
     }
 }
@@ -476,6 +501,8 @@ void PlayWidget::DieState()
 
 void PlayWidget::restart()
 {
+    //此函数用于马里奥生命值不为0的时候游戏的重置
+
     //重新初始化游戏数据
     mario->isdie = false;
     xnow = 0;
@@ -492,7 +519,11 @@ void PlayWidget::restart()
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
-
+void PlayWidget::ScoreAdd()
+{
+    //得分函数
+    score++;
+}
 
 
 

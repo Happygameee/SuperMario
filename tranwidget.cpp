@@ -8,8 +8,6 @@ Tranwidget::Tranwidget(QWidget *parent)
     this->setFixedSize(1200,600);
     this->setWindowIcon(QPixmap(":/resources/image/entity/person/childright0.png"));
     this->setWindowTitle("TranWidget");
-
-
 }
 
 void Tranwidget::paintEvent(QPaintEvent *)

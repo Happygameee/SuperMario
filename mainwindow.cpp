@@ -11,7 +11,7 @@
 #include "playwidget.h"
 #include "diewidget.h"
 #include <QTime>
-#include <QSoundEffect>
+#include <QSound>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedSize(1200,600);
     this->setWindowIcon(QPixmap(":/resources/image/entity/person/childright0.png"));
     this->setWindowTitle("Mario");
+
+    //QSound *back = new QSound(":/resources/audio/maintheme.wav",this);
+
+    //back->play();
 
     //创建记录器
 //    record = new Recorder(this);
