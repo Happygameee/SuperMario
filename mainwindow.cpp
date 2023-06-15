@@ -126,6 +126,17 @@ MainWindow::MainWindow(QWidget *parent)
                 });
             }
         });
+
+        connect(playwidget,&PlayWidget::PressB,[=](){
+            QTimer::singleShot(1000,this,[=](){
+                this->setGeometry(playwidget->geometry());
+                this->show();
+                playwidget->hide();
+                delete tranwidget;
+                delete playwidget;
+                delete diewidget;
+            });
+        });
     });
 }
 

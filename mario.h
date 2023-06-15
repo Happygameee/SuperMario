@@ -14,6 +14,7 @@ public:
     int y;//马里奥的y坐标
     int life;//马里奥的剩余生命值
     int walkstate;
+    int climbstate;
     int height;//马里奥的离地高度
     int distance;//马里奥所处平台离地面高度
     int upstate;//判断马里奥是在上升阶段还是下降阶段 0为在地面上 1为上升 2为下降
@@ -22,11 +23,14 @@ public:
     bool canmove;//判断马里奥是否还能继续移动
     bool ismoving;//判断马里奥是否正在移动
     bool isdie;
+    bool isWin;
+    bool isClimb;
 
     void walk();
     void jump_down();
     void Mario_Init();
     void Mario_Die();
+    void Mario_Climb();
 };
 
 #endif // MARIO_H

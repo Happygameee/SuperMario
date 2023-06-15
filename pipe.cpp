@@ -11,14 +11,14 @@ void Pipe::PipeInit()
     m_short.clear();
     m_mid.clear();
     m_long.clear();
-    int arr_short[3][2] = {{800,445},
-                           {6230,445},
-                           {6870,445}
+    int arr_short[3][2] = {{780,445},
+                           {6220,445},
+                           {6860,445}
                       };
-    int arr_mid[1][2] = {{1200,405}
+    int arr_mid[1][2] = {{1190,405}//80
     };
-    int arr_long[2][2] = {{1520,365},
-                         {1960,365}
+    int arr_long[2][2] = {{1510,365},
+                         {1950,365}
     };
 
     for (int i = 0; i < 3; i++) {

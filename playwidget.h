@@ -12,6 +12,7 @@
 #include "unknown.h"
 #include "musicplayer.h"
 #include "monster.h"
+#include "flag.h"
 
 class PlayWidget : public QMainWindow
 {
@@ -31,6 +32,7 @@ public:
     void DieState();
     void restart();//重新开始游戏的初始化
     void ScoreAdd();
+    void Game_Win();
 
     Mario *mario;
     Pipe *pipe;
@@ -39,6 +41,7 @@ public:
     Unknown *unknown;
     MusicPlayer *musicplayer;
     Monster *monster;
+    Flag *flag;
 
     int timer1;
     int timer2;
@@ -48,6 +51,7 @@ public:
     int score;
 signals:
     void MarioDie();
+    void PressB();//按b返回初始界面
 };
 
 #endif // PLAYWIDGET_H
