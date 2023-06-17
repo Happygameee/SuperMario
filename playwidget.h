@@ -13,6 +13,7 @@
 #include "musicplayer.h"
 #include "monster.h"
 #include "flag.h"
+#include "boom.h"
 
 class PlayWidget : public QMainWindow
 {
@@ -42,6 +43,7 @@ public:
     MusicPlayer *musicplayer;
     Monster *monster;
     Flag *flag;
+    Boom *boom;
 
     int timer1;
     int timer2;

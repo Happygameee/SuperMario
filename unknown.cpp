@@ -69,9 +69,5 @@ void Unknown::CoinAppear()
             coinheight += 10;
         }
     }
-    else if (coin_state == 0)
-    {
-
-    }
 }
 

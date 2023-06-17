@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QPropertyAnimation>
+#include "global.h"
 
 PlayWidget::PlayWidget(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,8 @@ PlayWidget::PlayWidget(QWidget *parent)
 
     QTimer::singleShot(1000, this, [=]() {
         timer1 = startTimer(15);
+        timer2 = startTimer(100);
+        musicplayer->play(BackMusic);
     });
     this->setFocusPolicy(Qt::StrongFocus);
 }
@@ -30,6 +33,7 @@ void PlayWidget::gameInit()
     musicplayer = new MusicPlayer;
     monster = new Monster;
     flag = new Flag;
+    boom = new Boom;
     score = 0;
     xnow = 0;
 }
@@ -54,6 +58,16 @@ void PlayWidget::timerEvent(QTimerEvent *ev)
         if (mario->isWin == true)
         {
             flag->FlagLower();
+        }
+    }
+    else if(ev->timerId()==timer2)
+    {
+        for (QVector < QVector < int >> ::iterator it = boom->m.begin()->begin(); it !=boom->m.begin()->end();it++)
+        {
+            if (mario->isWin)
+            {
+                boom->BoomRelease(it);
+            }
         }
     }
 }
@@ -97,13 +111,20 @@ void PlayWidget::paintEvent(QPaintEvent *)
         mon3ter.load(":/resources/image/entity/monster/ground/Monster" + QString::number(*(it->begin() + 5)) +".png");
         //mon3ter.load(":/resources/image/entity/monster/ground/Monster1.png");
         painter.drawPixmap(*(it->begin() + 2) + xnow,*(it->begin() + 3),40,40,mon3ter);
-        //qDebug() << *(it->begin() + 2) + xnow << *(it->begin() + 3);
     }
 
     //画旗子
     QPixmap FlaG;
     FlaG.load(":/resources/image/flag/flag.png");
     painter.drawPixmap(flag->Flag_x + xnow,flag->Flag_y,FlaG.width(),FlaG.height(),FlaG);
+
+    //画火球
+    QPixmap fireball;
+    for (QVector < QVector < int >> ::iterator it = boom->m.begin()->begin(); it !=boom->m.begin()->end();it++)
+    {
+        fireball.load(":/resources/image/particle/boom" + QString::number(*(it->begin() + 2)) + ".png");
+        painter.drawPixmap(*it->begin() + xnow,*(it->begin() + 1),40,40,fireball);
+    }
 
     //绘画马里奥
     QPixmap person;

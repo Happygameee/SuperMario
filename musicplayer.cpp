@@ -16,7 +16,7 @@ void MusicPlayer::play(QString str)
     mediaPlayer->setLoopCount(1);
     mediaPlayer->setVolume(0.5f);
     mediaPlayer->play();
-    //playerList.append(mediaPlayer);
+    qDebug() << 1;
 }
 
 void MusicPlayer::backMusicPlay(QString str)

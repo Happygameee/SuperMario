@@ -11,7 +11,7 @@ void Mario::Mario_Init()
 {
     x = 0;
     y = 485;
-    Map_x = 7000;
+    Map_x = 6000;
     life = 1;
     height = 0;
     distance = 0;

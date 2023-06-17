@@ -14,7 +14,7 @@ void Flag::FlagInit()
 
 void Flag::FlagLower()
 {
-    if (Flag_y != 460)
+    if (Flag_y != 440)
     {
         Flag_y += 10;
     }
