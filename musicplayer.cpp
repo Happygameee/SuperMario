@@ -16,7 +16,11 @@ void MusicPlayer::play(QString str)
     mediaPlayer->setLoopCount(1);
     mediaPlayer->setVolume(0.5f);
     mediaPlayer->play();
-    qDebug() << 1;
+}
+
+void MusicPlayer::close()
+{
+    mediaPlayer->stop();
 }
 
 void MusicPlayer::backMusicPlay(QString str)
@@ -25,5 +29,9 @@ void MusicPlayer::backMusicPlay(QString str)
     backPlayer->setLoopCount(QSoundEffect::Infinite);
     backPlayer->setVolume(0.5f);
     backPlayer->play();
-    //backplayerList.append(backPlayer);
+}
+
+void MusicPlayer::backMusicclose()
+{
+    backPlayer->stop();
 }

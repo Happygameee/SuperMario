@@ -12,7 +12,9 @@ class DieWidget : public QMainWindow
 public:
     explicit DieWidget(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
+    void Refresh();
 
+    int MarioLife;
 signals:
 
 };

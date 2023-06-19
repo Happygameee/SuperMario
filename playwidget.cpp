@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QPropertyAnimation>
+#include <QLabel>
 #include "global.h"
 
 PlayWidget::PlayWidget(QWidget *parent)
@@ -13,12 +14,40 @@ PlayWidget::PlayWidget(QWidget *parent)
     this->setFixedSize(1200,600);
     this->setWindowIcon(QPixmap(":/resources/image/entity/person/childright0.png"));
     this->setWindowTitle("PlayWidget");
+
+    //设置字体
+    QFont font;
+    //font.setFamily("STCaiyun");
+    font.setPointSize(50);
+
+    Score = new QLabel(this);
+    Score->setFixedSize(300,200);
+    Score->setParent(this);
+    Score->move(0,0);
+    str = QString("Score :");
+    Score->setText(str);
+    Score->setAlignment(Qt::AlignHCenter);
+    Score->setFont(font);
+    Score->setStyleSheet("color:white;");
+    Score->show();
+
+    Score1 = new QLabel(this);
+    Score1->setFixedSize(300,200);
+    Score1->setParent(this);
+    Score1->move(200,0);
+    str = QString("Score :");
+    Score1->setText(str);
+    Score1->setAlignment(Qt::AlignHCenter);
+    Score1->setFont(font);
+    Score1->setStyleSheet("color:white;");
+    Score1->show();
+
     gameInit();
 
     QTimer::singleShot(1000, this, [=]() {
         timer1 = startTimer(15);
         timer2 = startTimer(100);
-        musicplayer->play(BackMusic);
+        musicplayer->backMusicPlay(BackMusic1);
     });
     this->setFocusPolicy(Qt::StrongFocus);
 }
@@ -171,6 +200,7 @@ void PlayWidget::keyPressEvent(QKeyEvent *event)
         {
             mario->isjump = true;
             mario->upstate = 1;
+            musicplayer->play(":/resources/sound/big_jump.wav");
         }
         break;
     case Qt::Key_B:
@@ -582,6 +612,8 @@ void PlayWidget::DieState()
 {
     if(mario->isdie)
     {
+        musicplayer->backMusicclose();
+        musicplayer->backMusicPlay(DieMusic);
         qDebug() << mario->life;
         killTimer(timer1);//结束计时器
         emit MarioDie();
@@ -600,6 +632,8 @@ void PlayWidget::restart()
     mario->height = 0;
     mario->Map_x = 0;
     mario->canmove = true;
+    unknown->UnknownInit();
+    monster->MonsterInit();
 
     //重启计时器
     QTimer::singleShot(1000, this, [=]() {
@@ -612,6 +646,13 @@ void PlayWidget::ScoreAdd()
 {
     //得分函数
     score++;
+    ScoreUpdate(str,Score1);
+}
+
+void PlayWidget::ScoreUpdate(QString string,QLabel *s)
+{
+    string = QString::number(score);
+    s->setText(string);
 }
 
 void PlayWidget::Game_Win()

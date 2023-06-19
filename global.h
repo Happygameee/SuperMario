@@ -13,6 +13,10 @@ extern QVector<QSoundEffect*>backplayerList;
 extern MusicPlayer *musicPlayer;
 extern void stopAllMusic();
 extern void stopAllBackMusic();
-extern QString BackMusic;
+extern QString BackMusic1;
+extern QString BackMusic2;
+extern QString DieMusic;
+extern QString Game_Over;
+extern QString Jump;
 
 #endif // GLOBAL_H

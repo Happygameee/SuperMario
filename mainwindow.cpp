@@ -10,8 +10,8 @@
 #include "tranwidget.h"
 #include "playwidget.h"
 #include "diewidget.h"
-#include <QTime>
-#include <QSound>
+#include "global.h"
+#include "gameover.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,9 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QPixmap(":/resources/image/entity/person/childright0.png"));
     this->setWindowTitle("Mario");
 
-    //QSound *back = new QSound(":/resources/audio/maintheme.wav",this);
-
-    //back->play();
+    MusicPlayer *musicplayer = new MusicPlayer;
+    musicplayer->backMusicPlay(BackMusic1);
 
     //创建记录器
 //    record = new Recorder(this);
@@ -32,19 +31,27 @@ MainWindow::MainWindow(QWidget *parent)
 //    record->move(200,0);
 //    record->show();
 
-    MyPushButton *startBtn = new MyPushButton("");
-    //MyPushButton *assistBtn = new MyPushButton(":/resources/image/Btn/backBtn.png");
+    MyPushButton *startBtn = new MyPushButton(":/resources/image/end.png");
+    MyPushButton *assistBtn = new MyPushButton(":/resources/image/help.png");
 
     startBtn->setParent(this);
-    //assistBtn->setParent(this);
-    startBtn->move(400,300);
-    //assistBtn->move(400,400);
+    assistBtn->setParent(this);
+    startBtn->move(376,330);
+    assistBtn->move(374,450);
+
+    connect(assistBtn,&QPushButton::clicked,[=](){
+        assistBtn->zoom1();
+        assistBtn->zoom2();
+        QTimer::singleShot(100,this,[=](){
+        emit pressa();
+        });
+    });
 
     connect(startBtn,&QPushButton::clicked,[=](){
         startBtn->zoom1();
         startBtn->zoom2();
         QTimer::singleShot(100,this,[=](){
-        emit presss();
+            emit presss();
         });
     });
 
@@ -73,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
         DieWidget *diewidget = new DieWidget;
         QTimer::singleShot(100,this,[=](){
             //record->setParent(tranwidget);
+            musicplayer->backMusicclose();
             tranwidget->setGeometry(this->geometry());
             tranwidget->show();
             this->hide();
@@ -81,7 +89,6 @@ MainWindow::MainWindow(QWidget *parent)
         QTimer::singleShot(1000,this,[=](){
             //record->setParent(playwidget);
             //record->mario = playwidget->mario;
-            //gamesound->play();
             playwidget->setGeometry(tranwidget->geometry());
             playwidget->show();
             tranwidget->hide();
@@ -91,11 +98,14 @@ MainWindow::MainWindow(QWidget *parent)
             playwidget->mario->life--;
             if (playwidget->mario->life > 0)//马里奥生命值不为0 还能继续游戏
             {
-                playwidget->mario->isdie = false;
+                QTimer::singleShot(2500,this,[=](){
+                    playwidget->mario->isdie = false;
 
-                QTimer::singleShot(2000,this,[=](){
                     //record->setParent(tranwidget);
+                    playwidget->musicplayer->backMusicclose();
                     diewidget->setGeometry(playwidget->geometry());
+                    diewidget->MarioLife = playwidget->mario->life;
+                    diewidget->Refresh();
                     diewidget->show();
 
                     playwidget->restart();
@@ -103,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
                     QTimer::singleShot(1000,this,[=](){
                         //record->setParent(playwidget);
                         //record->mario = playwidget->mario;
+                        playwidget->musicplayer->backMusicPlay(BackMusic1);
                         playwidget->setGeometry(tranwidget->geometry());
                         playwidget->show();
                         diewidget->hide();
@@ -111,17 +122,23 @@ MainWindow::MainWindow(QWidget *parent)
             }
             else if (playwidget->mario->life == 0)//结束游戏
             {
+                GameOver *gameover = new GameOver;
                 //返回开始界面
-                QTimer::singleShot(1000,this,[=](){
-                    diewidget->show();
+                QTimer::singleShot(2500,this,[=](){
+                    playwidget->musicplayer->backMusicclose();
+                    musicplayer->backMusicPlay(Game_Over);
+                    gameover->show();
                     playwidget->hide();
-                    QTimer::singleShot(1000,this,[=](){
+                    QTimer::singleShot(4000,this,[=](){
+                        musicplayer->backMusicclose();
+                        musicplayer->backMusicPlay(BackMusic1);
                         this->setGeometry(playwidget->geometry());
                         this->show();
                         diewidget->hide();
                         delete playwidget;
                         delete tranwidget;
                         delete diewidget;
+                        delete gameover;
                     });
                 });
             }

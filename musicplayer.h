@@ -10,7 +10,9 @@ public:
     QSoundEffect *mediaPlayer;
     QSoundEffect *backPlayer;
     void play(QString str);
+    void close();
     void backMusicPlay(QString str);
+    void backMusicclose();
 signals:
 
 public slots:

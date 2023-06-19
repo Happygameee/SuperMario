@@ -3,8 +3,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include "recorder.h"
-
+#include "recorder.h"
+#include "musicplayer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    //Recorder *record;
+    Recorder *record;
     void paintEvent(QPaintEvent *);//重写绘图事件
     void keyPressEvent(QKeyEvent *ev);
     void keyReleaseEvent(QKeyEvent *ev);

@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "mario.h"
 #include <QTimer>
+#include <QLabel>
 #include <QSound>
 #include "pipe.h"
 #include "hole.h"
@@ -45,12 +46,17 @@ public:
     Flag *flag;
     Boom *boom;
 
+    QLabel *Score;
+    QLabel *Score1;
+    QString str;
+
     int timer1;
     int timer2;
     int timer3;
 
     int xnow;//用于画地图的表示当前的x值
-    int score;
+    int score;//记录分数
+    void ScoreUpdate(QString string,QLabel *s);
 signals:
     void MarioDie();
     void PressB();//按b返回初始界面

@@ -9,7 +9,11 @@ QVector<QSoundEffect*>backplayerList;
 MusicPlayer *musicPlayer = new MusicPlayer;
 
 //音效区
-QString BackMusic= ":/resources/music/game_over.wav";
+QString BackMusic1 = ":/resources/music/start.wav";
+QString BackMusic2 = ":/resources/sound/main_theme_sped_up.wav";
+QString DieMusic = ":/resources/music/death.wav";
+QString Game_Over = ":/resources/music/game_over.wav";
+QString Jump = ":/resources/sound/big_jump.wav";
 
 void stopAllMusic()
 {

@@ -11,8 +11,8 @@ void Mario::Mario_Init()
 {
     x = 0;
     y = 485;
-    Map_x = 6000;
-    life = 1;
+    Map_x = 0;
+    life = 2;
     height = 0;
     distance = 0;
     upstate = 0;
@@ -96,7 +96,7 @@ void Mario::walk()
     {
         walkstate = 0;
     }
-    qDebug() << Map_x << x;
+    //qDebug() << Map_x << x;
 }
 
 void Mario::jump_down()
@@ -157,13 +157,9 @@ void Mario::jump_down()
 
 void Mario::Mario_Die()
 {
-    if(isdie && life >0)
+    if (isdie)
     {
-
-    }
-    else if(life == 0)
-    {
-
+        canmove = false;
     }
 }
 
