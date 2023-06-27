@@ -15,6 +15,13 @@ PlayWidget::PlayWidget(QWidget *parent)
     this->setWindowIcon(QPixmap(":/resources/image/entity/person/childright0.png"));
     this->setWindowTitle("PlayWidget");
 
+    gameInit();
+
+    timer1 = startTimer(15);
+    timer2 = startTimer(100);
+    QTimer::singleShot(3000,this,[=](){
+        musicplayer->backMusicPlay(BackMusic1);
+    });
     //设置字体
     QFont font;
     //font.setFamily("STCaiyun");
@@ -35,20 +42,13 @@ PlayWidget::PlayWidget(QWidget *parent)
     Score1->setFixedSize(300,200);
     Score1->setParent(this);
     Score1->move(200,0);
-    str = QString("Score :");
+    str = QString("0");
     Score1->setText(str);
     Score1->setAlignment(Qt::AlignHCenter);
     Score1->setFont(font);
     Score1->setStyleSheet("color:white;");
     Score1->show();
 
-    gameInit();
-
-    QTimer::singleShot(1000, this, [=]() {
-        timer1 = startTimer(15);
-        timer2 = startTimer(100);
-        musicplayer->backMusicPlay(BackMusic1);
-    });
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -87,6 +87,15 @@ void PlayWidget::timerEvent(QTimerEvent *ev)
         if (mario->isWin == true)
         {
             flag->FlagLower();
+        }
+
+        if (trophyappear == 1)
+        {
+            killTimer(timer1);
+            killTimer(timer2);
+            QTimer::singleShot(1000,this,[=](){
+                emit Win();
+            });
         }
     }
     else if(ev->timerId()==timer2)
@@ -129,7 +138,6 @@ void PlayWidget::paintEvent(QPaintEvent *)
         if (*(it->begin()+2) == 0)
         {
             painter.drawPixmap(*it->begin() + xnow,unknown->coin_y + unknown->coinheight - 40,40,40,coin);
-            qDebug() << "1";
         }
     }
 
@@ -182,6 +190,14 @@ void PlayWidget::paintEvent(QPaintEvent *)
         person.load(":/resources/image/entity/person/childDie.png");
     }
     painter.drawPixmap(mario->x,mario->y + mario->height - mario->distance,40,40,person);
+
+    //画奖杯
+    QPixmap trophy;
+    trophy.load(":/resources/image/win.png");
+    if (trophyappear == 1)
+    {
+        painter.drawPixmap(517,233,trophy.width(),trophy.height(),trophy);
+    }
 }
 
 void PlayWidget::keyPressEvent(QKeyEvent *event)
@@ -201,6 +217,12 @@ void PlayWidget::keyPressEvent(QKeyEvent *event)
             mario->isjump = true;
             mario->upstate = 1;
             musicplayer->play(":/resources/sound/big_jump.wav");
+        }
+        break;
+    case Qt::Key_S:
+        if(mario->Map_x == 7870)
+        {
+            trophyappear = 1;
         }
         break;
     case Qt::Key_B:
@@ -236,7 +258,11 @@ void PlayWidget::Jump_Collision()
         {
             mario->isjump = true;
             mario->upstate = 2;
-            ScoreAdd();
+
+            if (*(it->begin()+2) == 1)
+            {
+                ScoreAdd();
+            }
 
             //分类unknown效果
             if (*(it->begin() + 2) == 1)
@@ -433,8 +459,11 @@ void PlayWidget::Move_Collision()
             &&*(it->begin() + 1)+40 >= mario->y + mario->height -mario->distance + 40
             )
         {
+            if (*(it->begin()+2) == 0)
+            {
+                ScoreAdd();//拾取金币得一分
+            }
             *(it->begin()+2) = 2;
-            ScoreAdd();//拾取金币得一分
         }
     }
 
@@ -590,8 +619,7 @@ void PlayWidget::Fall_Down(int &y)
                 )
             {
                 *(it->begin() + 5) = 3;
-                mario->upstate = 1;
-                ScoreAdd();
+                mario->upstate = 1;             
             }
         }
         else

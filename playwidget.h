@@ -50,6 +50,8 @@ public:
     QLabel *Score1;
     QString str;
 
+    bool trophyappear = 0;
+
     int timer1;
     int timer2;
     int timer3;
@@ -60,6 +62,7 @@ public:
 signals:
     void MarioDie();
     void PressB();//按b返回初始界面
+    void Win();
 };
 
 #endif // PLAYWIDGET_H

@@ -25,12 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
     MusicPlayer *musicplayer = new MusicPlayer;
     musicplayer->backMusicPlay(BackMusic1);
 
-    //创建记录器
-//    record = new Recorder(this);
-//    record->setFixedSize(800,60);
-//    record->move(200,0);
-//    record->show();
-
     MyPushButton *startBtn = new MyPushButton(":/resources/image/end.png");
     MyPushButton *assistBtn = new MyPushButton(":/resources/image/help.png");
 
@@ -79,19 +73,16 @@ MainWindow::MainWindow(QWidget *parent)
         PlayWidget *playwidget = new PlayWidget;
         DieWidget *diewidget = new DieWidget;
         QTimer::singleShot(100,this,[=](){
-            //record->setParent(tranwidget);
             musicplayer->backMusicclose();
             tranwidget->setGeometry(this->geometry());
             tranwidget->show();
             this->hide();
-        });
-        //过渡界面切换完之后里面切换到playwidget
-        QTimer::singleShot(1000,this,[=](){
-            //record->setParent(playwidget);
-            //record->mario = playwidget->mario;
-            playwidget->setGeometry(tranwidget->geometry());
-            playwidget->show();
-            tranwidget->hide();
+            //过渡界面切换完之后里面切换到playwidget
+            QTimer::singleShot(2000,this,[=](){
+                playwidget->setGeometry(tranwidget->geometry());
+                playwidget->show();
+                tranwidget->hide();
+            });
         });
 
         connect(playwidget,&PlayWidget::MarioDie,[=](){
@@ -148,6 +139,22 @@ MainWindow::MainWindow(QWidget *parent)
             QTimer::singleShot(1000,this,[=](){
                 this->setGeometry(playwidget->geometry());
                 this->show();
+                playwidget->musicplayer->backMusicclose();
+                musicplayer->backMusicPlay(Game_Over);
+                playwidget->hide();
+                delete tranwidget;
+                delete playwidget;
+                delete diewidget;
+            });
+        });
+
+        //游戏胜利返回主场景
+        connect(playwidget,&PlayWidget::Win,[=](){
+            QTimer::singleShot(1000,this,[=](){
+                this->setGeometry(playwidget->geometry());
+                this->show();
+                playwidget->musicplayer->backMusicclose();
+                //musicplayer->backMusicPlay();
                 playwidget->hide();
                 delete tranwidget;
                 delete playwidget;
